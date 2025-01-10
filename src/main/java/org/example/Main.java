@@ -13,7 +13,7 @@ public class Main {
         ContinueHandler continueHandler = new ContinueHandler();
         do {
             int choice = choiceHandler.showInputMenu();
-            if (choice < 1 || choice > 3) {
+            if (choice < 1 || choice > 4) {
                 System.out.println("Scelta non valida. Per favore, riprova.");
                 continue;
             }

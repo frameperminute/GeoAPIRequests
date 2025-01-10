@@ -32,11 +32,19 @@ public class QueryHandler {
                 break;
             case 3:
                 coords = coordinatesHandler.getCoordinatesFromUser();
+                double[] endCoords = coordinatesHandler.getEndCoordinatesFromUser();
+                queryOptimizedRoute(coords[0], coords[1], endCoords[0], endCoords[1]);
+                break;
+            case 4:
+                coords = coordinatesHandler.getCoordinatesFromUser();
                 latitude = coords[0];
                 longitude = coords[1];
+                double[] endCoordsForAll = coordinatesHandler.getEndCoordinatesFromUser();
                 address = coordinatesHandler.getAddressFromUser();
+                // Esegui tutte e tre le operazioni
                 queryAPIsWithCoordinates(latitude, longitude);
                 queryAPIsWithAddress(address);
+                queryOptimizedRoute(latitude, longitude, endCoordsForAll[0], endCoordsForAll[1]);
                 break;
         }
     }
@@ -58,6 +66,14 @@ public class QueryHandler {
         outputHandler.addResult("HERE WeGo (Forward Geocoding)",
                 hereHandler.searchAddress(address));
     }
+
+    private void queryOptimizedRoute(double startLat, double startLon, double endLat, double endLon) {
+        outputHandler.addResult("OpenStreetMap (Percorso Ottimizzato)",
+                osmHandler.getOptimizedRoute(startLat, startLon, endLat, endLon));
+        outputHandler.addResult("HERE WeGo (Percorso Ottimizzato)",
+                hereHandler.getOptimizedRoute(startLat, startLon, endLat, endLon));
+    }
+
 
 }
 

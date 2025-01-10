@@ -15,6 +15,16 @@ public class CoordinatesHandler {
         return new double[]{latitude, longitude};
     }
 
+    public double[] getEndCoordinatesFromUser() {
+        System.out.print("Inserisci latitudine di destinazione: \n");
+        double latitude = scanner.nextDouble();
+
+        System.out.print("Inserisci longitudine di destinazione: \n");
+        double longitude = scanner.nextDouble();
+
+        return new double[]{latitude, longitude};
+    }
+
     public String getAddressFromUser() {
         System.out.println("Inserisci indirizzo: ");
         scanner.next();

@@ -15,13 +15,19 @@ public abstract class GeoAPIHandler {
     // Restituisce informazioni relative a un determinato indirizzo
     public abstract String searchAddress(String address);
 
+    public abstract String getOptimizedRoute(double startLat, double startLon,
+                                             double endLat, double endLon);
+
     // Raccoglie dati dalla query in formato String
     protected String fetchData(String apiUrl) throws Exception {
         URL url = new URL(apiUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection)
+                url.openConnection();
         connection.setRequestMethod("GET");
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        connection.getInputStream()));
         String inputLine;
         StringBuilder content = new StringBuilder();
 

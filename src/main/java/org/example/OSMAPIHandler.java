@@ -34,4 +34,16 @@ public class OSMAPIHandler extends GeoAPIHandler {
         }
     }
 
+    @Override
+    public String getOptimizedRoute(double startLat, double startLon, double endLat, double endLon) {
+        try {
+            String apiUrl = "https://router.project-osrm.org/route/v1/driving/" + startLon + "," + startLat
+                    + ";" + endLon + "," + endLat + "?overview=false&steps=true";
+            return fetchData(apiUrl);
+        } catch (Exception e) {
+            return "Errore: " + e.getMessage();
+        }
+    }
+
+
 }

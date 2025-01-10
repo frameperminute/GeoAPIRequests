@@ -40,4 +40,16 @@ public class HereAPIHandler extends GeoAPIHandler {
         }
     }
 
+    @Override
+    public String getOptimizedRoute(double startLat, double startLon, double endLat, double endLon) {
+        try {
+            String apiUrl = "https://router.hereapi.com/v8/routes?transportMode=car&origin="
+                    + startLat + "," + startLon + "&destination=" + endLat + "," + endLon
+                    + "&return=polyline,actions&apikey=" + apiKey;
+            return fetchData(apiUrl);
+        } catch (Exception e) {
+            return "Errore: " + e.getMessage();
+        }
+    }
+
 }
