@@ -4,13 +4,14 @@ public class QueryHandler {
     private final OutputHandler outputHandler;
     private final OSMAPIHandler osmHandler;
     private final HereAPIHandler hereHandler;
+    private final AzureMapsAPIHandler azureMapsHandler;
     private final CoordinatesHandler coordinatesHandler;
 
-    public QueryHandler(OutputHandler outputHandler, OSMAPIHandler osmHandler,
-                        HereAPIHandler hereHandler, CoordinatesHandler coordinatesHandler) {
+    public QueryHandler(OutputHandler outputHandler, CoordinatesHandler coordinatesHandler) {
         this.outputHandler = outputHandler;
-        this.osmHandler = osmHandler;
-        this.hereHandler = hereHandler;
+        this.osmHandler = new OSMAPIHandler();
+        this.hereHandler = new HereAPIHandler();
+        this.azureMapsHandler = new AzureMapsAPIHandler();
         this.coordinatesHandler = coordinatesHandler;
     }
 
@@ -33,7 +34,7 @@ public class QueryHandler {
             case 3:
                 coords = coordinatesHandler.getCoordinatesFromUser();
                 double[] endCoords = coordinatesHandler.getEndCoordinatesFromUser();
-                queryOptimizedRoute(coords[0], coords[1], endCoords[0], endCoords[1]);
+                queryAPIsWithTwoAddresses(coords[0], coords[1], endCoords[0], endCoords[1]);
                 break;
             case 4:
                 coords = coordinatesHandler.getCoordinatesFromUser();
@@ -44,7 +45,7 @@ public class QueryHandler {
                 // Esegui tutte e tre le operazioni
                 queryAPIsWithCoordinates(latitude, longitude);
                 queryAPIsWithAddress(address);
-                queryOptimizedRoute(latitude, longitude, endCoordsForAll[0], endCoordsForAll[1]);
+                queryAPIsWithTwoAddresses(latitude, longitude, endCoordsForAll[0], endCoordsForAll[1]);
                 break;
         }
     }
@@ -58,6 +59,14 @@ public class QueryHandler {
                 hereHandler.getGeoData(latitude, longitude));
         outputHandler.addResult("HERE WeGo (Attivita Vicine)",
                 hereHandler.getNearbyAmenities(latitude, longitude));
+        outputHandler.addResult("Azure Maps (Reverse Geocoding)",
+                azureMapsHandler.getGeoData(latitude, longitude));
+        outputHandler.addResult("Azure Maps (Fuso Orario)",
+                azureMapsHandler.getTimezoneByCoordinates(latitude, longitude));
+        outputHandler.addResult("Azure Maps (Flusso Del Traffico)",
+                azureMapsHandler.getTrafficFlowSegment(latitude, longitude));
+        outputHandler.addResult("Azure Maps (Qualita Aria 3 Giorni)",
+                azureMapsHandler.getAirQualityDailyForecasts(latitude, longitude));
     }
 
     private void queryAPIsWithAddress(String address) {
@@ -65,13 +74,17 @@ public class QueryHandler {
                 osmHandler.searchAddress(address));
         outputHandler.addResult("HERE WeGo (Forward Geocoding)",
                 hereHandler.searchAddress(address));
+        outputHandler.addResult("Azure Maps (Forward Geocoding)",
+                azureMapsHandler.searchAddress(address));
     }
 
-    private void queryOptimizedRoute(double startLat, double startLon, double endLat, double endLon) {
+    private void queryAPIsWithTwoAddresses(double startLat, double startLon, double endLat, double endLon) {
         outputHandler.addResult("OpenStreetMap (Percorso Ottimizzato)",
                 osmHandler.getOptimizedRoute(startLat, startLon, endLat, endLon));
         outputHandler.addResult("HERE WeGo (Percorso Ottimizzato)",
                 hereHandler.getOptimizedRoute(startLat, startLon, endLat, endLon));
+        outputHandler.addResult("Azure Maps (Percorso Ottimizzato)",
+                azureMapsHandler.getOptimizedRoute(startLat, startLon, endLat, endLon));
     }
 
 

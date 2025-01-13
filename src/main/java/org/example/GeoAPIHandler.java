@@ -9,14 +9,8 @@ public abstract class GeoAPIHandler {
     // Restituisce dati geografici di una determinata coordinata
     public abstract String getGeoData(double latitude, double longitude);
 
-    // Restituisce attivita vicine alla coordinata scelta
-    public abstract String getNearbyAmenities(double latitude, double longitude);
-
     // Restituisce informazioni relative a un determinato indirizzo
     public abstract String searchAddress(String address);
-
-    public abstract String getOptimizedRoute(double startLat, double startLon,
-                                             double endLat, double endLon);
 
     // Raccoglie dati dalla query in formato String
     protected String fetchData(String apiUrl) throws Exception {
